@@ -15,6 +15,6 @@ dependencies:
     version: 5.3.0
 direct_dependencies:
 - espressif/coap
-manifest_hash: 617c50b02ef085c094d419f475e8d4a8efa32b20fc4cf9a0c93609ffc3b3a42a
+manifest_hash: 895cb69504d3d54facd2b65d7725c9a8475970c5102b94907feb337b861cc0ef
 target: esp32
 version: 2.0.0

@@ -3,3 +3,4 @@ sdkconfig
 sdkconfig.old
 esp-idf-v5.3/
 managed_components/
+components/
