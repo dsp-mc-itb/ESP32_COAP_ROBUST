@@ -1,5 +1,5 @@
 # ESP32_COAP_CLIENT_ROBUST
-ESP with Development of Robust CoAP
+#### ESP32 with Development of Robust CoAP
 
 # Requirements
 
@@ -19,6 +19,14 @@ ESP-IDF is Espressif's official IoT Development Framework for the ESP32, ESP32-S
 - Git Clone https://github.com/dsp-mc-itb/ESP32_COAP_ROBUST.git
 - Kita perlu menjalankan esp-idf initial script (export.bat) namun pada shell environment kita. Caranya ngakalinnya adalah membuat script.bat yang isinya adalah menjalankan export.bat di folder/lokasi tempat esp-idf-v5.3.1
 - edit script.bat untuk lokasi tempat penyimpanan anda menaruh folder esp-idf-v5.3.1
+- jalankan script.bat , jika sudah berhasil kita bisa menggunakan fungsi idf.py
+- build menggunakan ``idf.py build``
+- flash menggunakan ``idf.py flash``
+- monitor menggunakan ``idf.py monitor``
+
+- more info : `idf.py help`
+
+
 
 
 
