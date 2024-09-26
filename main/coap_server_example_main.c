@@ -14,6 +14,7 @@
 #include "protocol_examples_common.h"
 
 #include "coap3/coap.h"
+#include "lib_camera.h"
 
 #ifndef CONFIG_COAP_SERVER_SUPPORT
 #error COAP_SERVER_SUPPORT needs to be enabled
@@ -26,7 +27,7 @@ const static char *TAG = "CoAP_server";
 
 static char espressif_data[100];
 static int espressif_data_len = 0;
-
+camera_fb_t *image = NULL;
 #ifdef CONFIG_COAP_OSCORE_SUPPORT
 extern uint8_t oscore_conf_start[] asm("_binary_coap_oscore_conf_start");
 extern uint8_t oscore_conf_end[]   asm("_binary_coap_oscore_conf_end");
@@ -372,10 +373,13 @@ clean_up:
 
 void app_main(void)
 {
-    ESP_ERROR_CHECK( nvs_flash_init() );
+    ESP_ERROR_CHECK(nvs_flash_init() );
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
+    ESP_ERROR_CHECK(camera_init_default());
     ESP_ERROR_CHECK(example_connect());
+ 
+    vTaskDelay(1 * 200 / portTICK_PERIOD_MS);
 
     xTaskCreate(coap_example_server, "coap", 8 * 1024, NULL, 5, NULL);
 }

@@ -78,7 +78,7 @@ esp_err_t camera_init_default() {
     config.pin_reset = RESET_GPIO_NUM;
     config.xclk_freq_hz = 16000000; //10000000
     // config.pixel_format = PIXFORMAT_GRAYSCALE;
-    config.pixel_format = image_format;
+    config.pixel_format = ESP_DEFAULT_IMAGE_FORMAT;
     // init with high specs to pre-allocate larger buffers
     // config.frame_size = FRAMESIZE_96X96;
     // config.frame_size = FRAMESIZE_VGA;
@@ -105,8 +105,8 @@ esp_err_t camera_init_default() {
     }
     // drop down frame size for higher initial frame rate
     // s->set_framesize(s, FRAMESIZE_96X96);
-    s->set_pixformat(s, image_format);
-    s->set_framesize(s, image_size);
+    s->set_pixformat(s, ESP_DEFAULT_IMAGE_FORMAT);
+    s->set_framesize(s, FRAMESIZE_HD);
     return ESP_OK;
 }
 

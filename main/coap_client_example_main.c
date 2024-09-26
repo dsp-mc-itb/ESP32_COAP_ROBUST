@@ -488,21 +488,21 @@ clean_up:
 
 void app_main(void)
 {
-    printf("sean\n");
+   
     ESP_ERROR_CHECK( nvs_flash_init() );
-      printf("sean\n");
+    
     ESP_ERROR_CHECK(esp_netif_init());
-      printf("sean\n");
+     
     ESP_ERROR_CHECK(esp_event_loop_create_default());
-      printf("sean\n");
+      
 
     /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
      * Read "Establishing Wi-Fi or Ethernet Connection" section in
      * examples/protocols/README.md for more information about this function.
      */
     ESP_ERROR_CHECK(example_connect());
-     printf("sean1\n");
+    ;
      //coap_client_server(NULL);
- printf("sean2\n");
+
     xTaskCreate(coap_example_client, "coap", 8 * 1024, NULL, 5, NULL);
 }
