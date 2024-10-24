@@ -32,6 +32,7 @@
 #include "protocol_examples_common.h"
 
 #include "coap3/coap.h"
+#include "lib_camera.h"
 
 
 #ifndef CONFIG_COAP_CLIENT_SUPPORT
@@ -496,6 +497,7 @@ void app_main(void)
      * examples/protocols/README.md for more information about this function.
      */
     ESP_ERROR_CHECK(example_connect());
+    ESP_ERROR_CHECK(camera_init_default());
 
     xTaskCreate(coap_example_client, "coap", 8 * 1024, NULL, 5, NULL);
 }
