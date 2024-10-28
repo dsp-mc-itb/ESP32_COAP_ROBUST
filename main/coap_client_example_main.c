@@ -338,7 +338,7 @@ void send_image(coap_session_t *session) {
     }
       
     // coap_add_option(request, 65002, sizeof(intValue),(uint8_t*)&intValue);
-    coap_add_option(request, COAP_OPTION_URI_PATH, 5, (uint8_t *)image_path);
+    coap_add_option(request, COAP_OPTION_URI_PATH, 12, (uint8_t *)image_path);
    
     coap_add_data_large_request(session,request, payload.length, payload.s, NULL, NULL);
  
