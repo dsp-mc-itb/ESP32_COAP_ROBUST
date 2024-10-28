@@ -471,12 +471,12 @@ static void coap_example_client(void *p)
 #endif /* CONFIG_COAP_WEBSOCKETS */
 
     while (1) {
-        request = coap_new_pdu(coap_is_mcast(&dst_addr) ? COAP_MESSAGE_NON : COAP_MESSAGE_CON,
-                               COAP_REQUEST_CODE_POST, session);
-        if (!request) {
-            ESP_LOGE(TAG, "coap_new_pdu() failed");
-            goto clean_up;
-        }
+        // request = coap_new_pdu(coap_is_mcast(&dst_addr) ? COAP_MESSAGE_NON : COAP_MESSAGE_CON,
+        //                        COAP_REQUEST_CODE_POST, session);
+        // if (!request) {
+        //     ESP_LOGE(TAG, "coap_new_pdu() failed");
+        //     goto clean_up;
+        // }
         /*Fungsi untuk menyiapkan dan mengirimkan image
         send_image(session, &tick_send_image)
         */
