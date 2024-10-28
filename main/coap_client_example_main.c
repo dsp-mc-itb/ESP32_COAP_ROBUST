@@ -301,6 +301,57 @@ coap_start_anon_pki_session(coap_context_t *ctx, coap_address_t *dst_addr, coap_
 #endif /* ! CONFIG_COAP_OSCORE_SUPPORT */
 }
 
+camera_fb_t *image = NULL;
+int64_t tick_send_image = 0;
+static coap_string_t payload = {0, NULL}; /* payload to send */
+void send_image(coap_session_t *session) {
+        
+    coap_pdu_t *request = NULL;
+    uint8_t token[8];
+    size_t tokenlen; 
+    payload.length = 0; 
+    payload.s = NULL; 
+
+    coap_optlist_t *optlist = NULL;
+    //coba_duration = esp_timer_get_time();
+    image = camera_capture();
+   //  coba_duration = esp_timer_get_time() - coba_duration;
+
+    if (!image) {
+        coap_log(LOG_NOTICE, "Take image failed!\n");
+        goto clean_up;
+    }
+
+    payload.s = image->buf;
+    payload.length = image->len;
+
+    coap_log(LOG_NOTICE, "Take image success\n");
+
+    if (!(request = coap_new_pdu(COAP_MESSAGE_CON,COAP_REQUEST_CODE_PUT, session))) {  
+        ESP_LOGE(TAG, "coap_new_pdu() failed");
+    }                        
+    
+    coap_session_new_token(session, &tokenlen, token);
+    if (!coap_add_token(request, tokenlen, token)) {
+        coap_log(LOG_DEBUG, "cannot add token to request\n");
+    }
+      
+    // coap_add_option(request, 65002, sizeof(intValue),(uint8_t*)&intValue);
+    // coap_add_option(request, COAP_OPTION_URI_PATH, 5, (uint8_t *)image_path);
+   
+    coap_add_data_large_request(session,request, payload.length, payload.s, NULL, NULL);
+ 
+    coap_send(session, request);
+   
+clean_up:
+   
+    if (optlist) {
+        coap_delete_optlist(optlist);
+        optlist = NULL;
+    }
+      
+}
+
 static void coap_example_client(void *p)
 {
     coap_address_t   dst_addr;
@@ -309,8 +360,8 @@ static void coap_example_client(void *p)
     coap_context_t *ctx = NULL;
     coap_session_t *session = NULL;
     coap_pdu_t *request = NULL;
-    unsigned char token[8];
-    size_t tokenlength;
+    //unsigned char token[8];
+    //size_t tokenlength;
     coap_addr_info_t *info_list = NULL;
     coap_proto_t proto;
     char tmpbuf[INET6_ADDRSTRLEN];
@@ -421,33 +472,15 @@ static void coap_example_client(void *p)
 
     while (1) {
         request = coap_new_pdu(coap_is_mcast(&dst_addr) ? COAP_MESSAGE_NON : COAP_MESSAGE_CON,
-                               COAP_REQUEST_CODE_GET, session);
+                               COAP_REQUEST_CODE_POST, session);
         if (!request) {
             ESP_LOGE(TAG, "coap_new_pdu() failed");
             goto clean_up;
         }
-        /* Add in an unique token */
-        coap_session_new_token(session, &tokenlength, token);
-        coap_add_token(request, tokenlength, token);
-
-        /*
-         * To make this a POST, you will need to do the following
-         * Change COAP_REQUEST_CODE_GET to COAP_REQUEST_CODE_POST for coap_new_pdu()
-         * Add in here a Content-Type Option based on the format of the POST text.  E.G. for JSON
-         *   u_char buf[4];
-         *   coap_insert_optlist(&optlist,
-         *                       coap_new_optlist(COAP_OPTION_CONTENT_FORMAT,
-         *                                        coap_encode_var_safe (buf, sizeof (buf),
-         *                                                              COAP_MEDIATYPE_APPLICATION_JSON),
-         *                                        buf));
-         * Add in here the POST data of length length. E.G.
-         *   coap_add_data_large_request(session, request length, data, NULL, NULL);
-         */
-
-        coap_add_optlist_pdu(request, &optlist);
-
-        resp_wait = 1;
-        coap_send(session, request);
+        /*Fungsi untuk menyiapkan dan mengirimkan image
+        send_image(session, &tick_send_image)
+        */
+        send_image(session); 
 
         wait_ms = COAP_DEFAULT_TIME_SEC * 1000;
 
@@ -462,7 +495,7 @@ static void coap_example_client(void *p)
                 }
             }
         }
-        for (int countdown = 10; countdown >= 0; countdown--) {
+        for (int countdown = 100; countdown >= 0; countdown--) {
             ESP_LOGI(TAG, "%d... ", countdown);
             vTaskDelay(1000 / portTICK_PERIOD_MS);
         }

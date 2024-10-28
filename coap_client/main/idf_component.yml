@@ -1,5 +1,0 @@
-dependencies:
-  espressif/coap:
-    version: ^4.3.0
-description: CoAP Client Example
-version: 1.0.0
