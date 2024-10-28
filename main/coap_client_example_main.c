@@ -304,6 +304,7 @@ coap_start_anon_pki_session(coap_context_t *ctx, coap_address_t *dst_addr, coap_
 camera_fb_t *image = NULL;
 int64_t tick_send_image = 0;
 static coap_string_t payload = {0, NULL}; /* payload to send */
+char *image_path = "example_data";
 void send_image(coap_session_t *session) {
         
     coap_pdu_t *request = NULL;
@@ -337,7 +338,7 @@ void send_image(coap_session_t *session) {
     }
       
     // coap_add_option(request, 65002, sizeof(intValue),(uint8_t*)&intValue);
-    // coap_add_option(request, COAP_OPTION_URI_PATH, 5, (uint8_t *)image_path);
+    coap_add_option(request, COAP_OPTION_URI_PATH, 5, (uint8_t *)image_path);
    
     coap_add_data_large_request(session,request, payload.length, payload.s, NULL, NULL);
  
@@ -385,7 +386,7 @@ static void coap_example_client(void *p)
         goto clean_up;
     }
     coap_context_set_block_mode(ctx,
-                                COAP_BLOCK_USE_LIBCOAP | COAP_BLOCK_SINGLE_BODY);
+                                COAP_BLOCK_USE_LIBCOAP);
 
     coap_register_response_handler(ctx, message_handler);
 
